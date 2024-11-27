@@ -13,14 +13,24 @@
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "22.7.9",
+    "aws-cdk": "2.171.0",
+    "drizzle-kit": "^0.28.1",
     "jest": "^29.7.0",
     "ts-jest": "^29.2.5",
-    "aws-cdk": "2.171.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.6.3"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.4.1",
+    "@libsql/client": "^0.14.0",
+    "argon2": "^0.41.1",
     "aws-cdk-lib": "2.171.0",
-    "constructs": "^10.0.0"
+    "constructs": "^10.0.0",
+    "drizzle-orm": "^0.36.4",
+    "hono": "^4.6.12",
+    "hono-pino": "^0.7.0",
+    "pino": "^9.5.0",
+    "stoker": "^1.4.2",
+    "zod": "^3.23.8"
   }
 }
