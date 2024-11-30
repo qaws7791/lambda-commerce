@@ -100,3 +100,57 @@ export const productsRelations = relations(products, ({ one }) => ({
     references: [categories.id],
   }),
 }));
+export const carts = sqliteTable("carts", {
+  id: integer("id", {
+    mode: "number",
+  }).primaryKey({ autoIncrement: true }),
+
+  userId: integer("user_id", {
+    mode: "number",
+  }).notNull(),
+
+  createdAt: text("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const cartItems = sqliteTable("cart_items", {
+  id: integer("id", {
+    mode: "number",
+  }).primaryKey({ autoIncrement: true }),
+
+  cartId: integer("cart_id", {
+    mode: "number",
+  }).notNull(),
+
+  productId: integer("product_id", {
+    mode: "number",
+  }).notNull(),
+
+  quantity: integer("quantity", {
+    mode: "number",
+  }).notNull(),
+
+  createdAt: text("created_at")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const cartsRelations = relations(carts, ({ many, one }) => ({
+  items: many(cartItems),
+  user: one(users, {
+    fields: [carts.userId],
+    references: [users.id],
+  }),
+}));
+
+export const cartItemsRelations = relations(cartItems, ({ one }) => ({
+  cart: one(carts, {
+    fields: [cartItems.cartId],
+    references: [carts.id],
+  }),
+  product: one(products, {
+    fields: [cartItems.productId],
+    references: [products.id],
+  }),
+}));

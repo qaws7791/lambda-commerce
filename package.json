@@ -10,6 +10,10 @@
     "test": "jest",
     "cdk": "cdk"
   },
+  "os": [
+    "win32",
+    "linux"
+  ],
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "22.7.9",
@@ -23,10 +27,11 @@
   "dependencies": {
     "@hono/zod-validator": "^0.4.1",
     "@libsql/client": "^0.14.0",
-    "argon2": "^0.41.1",
     "aws-cdk-lib": "2.171.0",
     "constructs": "^10.0.0",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.36.4",
+    "hash-wasm": "^4.12.0",
     "hono": "^4.6.12",
     "hono-pino": "^0.7.0",
     "pino": "^9.5.0",

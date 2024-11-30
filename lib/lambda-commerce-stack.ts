@@ -14,7 +14,11 @@ export class LambdaCommerceStack extends cdk.Stack {
       runtime: lambda.Runtime.NODEJS_20_X,
       environment: {
         JWT_SECRET: this.node.tryGetContext("JWT_SECRET"),
+        DATABASE_URL: this.node.tryGetContext("DATABASE_URL"),
+        DATABASE_TOKEN: this.node.tryGetContext("DATABASE_TOKEN"),
       },
+      memorySize: 512,
+      timeout: cdk.Duration.seconds(15),
     });
     fn.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE,

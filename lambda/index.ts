@@ -9,13 +9,24 @@ import adminProducts from "./routes/admin/products";
 import frontCategories from "./routes/front/categories";
 import frontProducts from "./routes/front/products";
 import frontAuth from "./routes/front/auth";
+import { pinoLogger } from "hono-pino";
+import { jwt } from "hono/jwt";
+import userGuard from "./guards/user.guard";
+import frontCarts from "./routes/front/carts";
 
 const app = new Hono<AppBindings>({
   strict: false,
 });
-
+app.use(pinoLogger());
 app.use(cors());
 app.use(serveEmojiFavicon("🔥"));
+
+app.use("/admin/*", (c, next) => {
+  const jwtMiddleware = jwt({
+    secret: env(c).JWT_SECRET,
+  });
+  return jwtMiddleware(c, next);
+});
 
 // Admin Routes(For Admin)
 app.route("/admin/categories", adminCategories);
@@ -25,15 +36,19 @@ app.route("/admin/products", adminProducts);
 app.route("/front/auth", frontAuth);
 app.route("/front/categories", frontCategories);
 app.route("/front/products", frontProducts);
+app.route("/front/carts", frontCarts);
 
-app.get("/", (c) => {
-  const { JWT_SECRET } = env(c);
-
+app.get("/", async (c) => {
   return c.json({
     message: "Hello, World!",
-    JWT_SECRET: JWT_SECRET
-      ? JWT_SECRET
-      : "No JWT_SECRET found in environment variables",
+    jwtSecret: env(c).JWT_SECRET,
+  });
+});
+
+app.get("/protected", userGuard, async (c) => {
+  return c.json({
+    message: "Protected Route",
+    jwtPayload: c.get("jwtPayload"),
   });
 });
 

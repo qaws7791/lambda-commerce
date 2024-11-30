@@ -1,10 +1,16 @@
 import { drizzle } from "drizzle-orm/libsql/web";
 import { createClient } from "@libsql/client/web";
 
+const databaseUrl = process.env.DATABASE_URL;
+const databaseToken = process.env.DATABASE_TOKEN;
+
+if (!databaseUrl || !databaseToken) {
+  throw new Error("DATABASE_URL is required");
+}
+
 const client = createClient({
-  url: "libsql://commerce-qaws7791.turso.io",
-  authToken:
-    "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJleHAiOjE3NjQyNzQ5NTAsImlhdCI6MTczMjczODk1MCwiaWQiOiJhYjY5YmZhYi1kN2FhLTRmZjYtOGFhYS0wM2QxODIwMjY2MjkifQ.tqkHnslDn4zo-SFaNPquubJ0bKVwweEgwtPDprSk0DFnF9a8JI0RyILrExQPcOs3j3LUQWyZGWGK186uLqbRDA",
+  url: databaseUrl,
+  authToken: databaseToken,
 });
 
 const db = drizzle({

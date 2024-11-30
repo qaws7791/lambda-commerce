@@ -4,9 +4,10 @@ import type { AppBindings } from "../../types";
 import { products } from "../../db/schema";
 import { desc, eq } from "drizzle-orm";
 import { zValidator } from "@hono/zod-validator";
-import { numberIdSchema, pagingSchema } from "../../validations/common";
+import { numberIdSchema } from "../../validations/common";
 import {
   createProductBodySchema,
+  productPagingSchema,
   updateProductBodySchema,
 } from "../../validations/products";
 import { DEFAULT_LIMIT, DEFAULT_PAGE } from "../../constants";
@@ -15,9 +16,10 @@ import db from "../../db";
 const adminProducts = new Hono<AppBindings>();
 
 adminProducts
-  .get("/", zValidator("query", pagingSchema), async (c) => {
+  .get("/", zValidator("query", productPagingSchema), async (c) => {
     // initialize
     const query = c.req.valid("query");
+    const category = query.category;
     const page = query.page || DEFAULT_PAGE;
     const limit = query.limit || DEFAULT_LIMIT;
 
@@ -25,6 +27,7 @@ adminProducts
     const data = await db
       .select()
       .from(products)
+      .where(category ? eq(products.categoryId, category) : undefined)
       .orderBy(desc(products.id))
       .limit(limit)
       .offset((page - 1) * limit);

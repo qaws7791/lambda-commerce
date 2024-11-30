@@ -17,3 +17,9 @@ export const updateProductBodySchema = z.object({
   image: z.string().url().optional(),
   description: z.string().optional(),
 });
+
+export const productPagingSchema = z.object({
+  page: z.coerce.number().min(1).optional(),
+  limit: z.coerce.number().min(1).max(100).optional(),
+  category: z.coerce.number().optional(),
+});
